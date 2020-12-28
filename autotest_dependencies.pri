@@ -1,4 +1,4 @@
-QTC_PLUGIN_NAME = AutoTest
+QTC_PLUGIN_NAME = AutoTestNG
 
 QTC_PLUGIN_DEPENDS += \
     coreplugin \
