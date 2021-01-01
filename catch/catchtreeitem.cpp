@@ -167,7 +167,7 @@ TestConfiguration *CatchTreeItem::testConfiguration() const
     config->setProjectFile(proFile());
     config->setProject(project);
     config->setTestCases(QStringList(testCasesString()));
-    config->setInternalTargets(internalTargets());
+    config->setInternalTargets(CppTestTreeItem::internalTargets(filePath()));
     return config;
 }
 
@@ -206,7 +206,7 @@ static void collectTestInfo(const TestTreeItem *item,
             CatchTreeItem *current = static_cast<CatchTreeItem *>(it);
             testCasesForProfile[projectFile].names.append(current->testCasesString());
         });
-        testCasesForProfile[projectFile].internalTargets.unite(item->internalTargets());
+        testCasesForProfile[projectFile].internalTargets.unite(CppTestTreeItem::internalTargets(item->filePath()));
     } else if (item->checked() == Qt::PartiallyChecked) {
         item->forFirstLevelChildren([&testCasesForProfile](TestTreeItem *child) {
             QTC_ASSERT(child->type() == TestTreeItem::TestCase, return);
@@ -214,7 +214,7 @@ static void collectTestInfo(const TestTreeItem *item,
                 CatchTreeItem *current = static_cast<CatchTreeItem *>(child);
                 testCasesForProfile[child->proFile()].names.append(current->testCasesString());
                 testCasesForProfile[child->proFile()].internalTargets.unite(
-                            child->internalTargets());
+                            CppTestTreeItem::internalTargets(child->filePath()));
             }
 
         });
@@ -235,7 +235,7 @@ static void collectFailedTestInfo(const CatchTreeItem *item,
             CatchTreeItem *current = static_cast<CatchTreeItem *>(it);
             testCasesForProfile[it->proFile()].names.append(current->testCasesString());
             testCasesForProfile[it->proFile()].internalTargets.unite(
-                        it->internalTargets());
+                        CppTestTreeItem::internalTargets(it->filePath()));
         }
     });
 }
@@ -301,7 +301,7 @@ QList<TestConfiguration *> CatchTreeItem::getTestConfigurationsForFile(const Uti
         testConfig->setTestCases(testCases);
         testConfig->setProjectFile(item->proFile());
         testConfig->setProject(ProjectExplorer::SessionManager::startupProject());
-        testConfig->setInternalTargets(item->internalTargets());
+        testConfig->setInternalTargets(CppTestTreeItem::internalTargets(item->filePath()));
         result << testConfig;
     }
 

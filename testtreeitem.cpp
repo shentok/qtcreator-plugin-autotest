@@ -318,18 +318,18 @@ bool TestTreeItem::isGroupable() const
     return true;
 }
 
-QSet<QString> TestTreeItem::internalTargets() const
+QSet<QString> CppTestTreeItem::internalTargets(const QString &filePath)
 {
     auto cppMM = CppTools::CppModelManager::instance();
-    const QList<CppTools::ProjectPart::Ptr> projectParts = cppMM->projectPart(m_filePath);
+    const QList<CppTools::ProjectPart::Ptr> projectParts = cppMM->projectPart(filePath);
     // if we have no project parts it's most likely a header with declarations only and CMake based
     if (projectParts.isEmpty())
-        return TestTreeItem::dependingInternalTargets(cppMM, m_filePath);
+        return dependingInternalTargets(cppMM, filePath);
     QSet<QString> targets;
     for (const CppTools::ProjectPart::Ptr &part : projectParts) {
         targets.insert(part->buildSystemTarget);
         if (part->buildTargetType != ProjectExplorer::BuildTargetType::Executable)
-            targets.unite(TestTreeItem::dependingInternalTargets(cppMM, m_filePath));
+            targets.unite(dependingInternalTargets(cppMM, filePath));
     }
     return targets;
 }
@@ -376,8 +376,8 @@ ITestFramework *TestTreeItem::framework() const
  * try to find build system target that depends on the given file - if the file is no header
  * try to find the corresponding header and use this instead to find the respective target
  */
-QSet<QString> TestTreeItem::dependingInternalTargets(CppTools::CppModelManager *cppMM,
-                                                     const QString &file)
+QSet<QString> CppTestTreeItem::dependingInternalTargets(CppTools::CppModelManager *cppMM,
+                                                        const QString &file)
 {
     QSet<QString> result;
     QTC_ASSERT(cppMM, return result);

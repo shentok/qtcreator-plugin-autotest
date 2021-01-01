@@ -134,14 +134,11 @@ public:
     virtual TestTreeItem *applyFilters() { return nullptr; }
     // decide whether an item should still be added to the treemodel
     virtual bool shouldBeAddedAfterFiltering() const { return true; }
-    virtual QSet<QString> internalTargets() const;
 
     QString cacheName() const { return m_filePath + ':' + m_name; }
 protected:
     void copyBasicDataFrom(const TestTreeItem *other);
     typedef std::function<bool(const TestTreeItem *)> CompareFunction;
-    static QSet<QString> dependingInternalTargets(CppTools::CppModelManager *cppMM,
-                                                  const QString &file);
 
 private:
     bool modifyFilePath(const QString &filePath);
@@ -166,6 +163,14 @@ private:
     Status m_status = NewlyAdded;
 
     friend class TestTreeModel; // grant access to (protected) findChildBy()
+};
+
+namespace CppTestTreeItem
+{
+    QSet<QString> internalTargets(const QString &filePath);
+
+    QSet<QString> dependingInternalTargets(CppTools::CppModelManager *cppMM,
+                                           const QString &file);
 };
 
 class TestCodeLocationAndType

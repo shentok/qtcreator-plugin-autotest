@@ -144,7 +144,7 @@ TestConfiguration *QtTestTreeItem::testConfiguration() const
         return nullptr;
     }
     if (config)
-        config->setInternalTargets(internalTargets());
+        config->setInternalTargets(CppTestTreeItem::internalTargets(filePath()));
     return config;
 }
 
@@ -185,7 +185,7 @@ static void fillTestConfigurationsFromCheckState(const TestTreeItem *item,
         testConfig->setTestCases(testCases);
         testConfig->setProjectFile(item->proFile());
         testConfig->setProject(ProjectExplorer::SessionManager::startupProject());
-        testConfig->setInternalTargets(item->internalTargets());
+        testConfig->setInternalTargets(CppTestTreeItem::internalTargets(item->filePath()));
         testConfigurations << testConfig;
     }
 }
@@ -217,7 +217,7 @@ static void collectFailedTestInfo(TestTreeItem *item, QList<TestConfiguration *>
     testConfig->setTestCases(testCases);
     testConfig->setProjectFile(item->proFile());
     testConfig->setProject(ProjectExplorer::SessionManager::startupProject());
-    testConfig->setInternalTargets(item->internalTargets());
+    testConfig->setInternalTargets(CppTestTreeItem::internalTargets(item->filePath()));
     testConfigs << testConfig;
 }
 

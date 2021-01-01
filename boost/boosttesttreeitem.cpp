@@ -198,7 +198,7 @@ QList<TestConfiguration *> BoostTestTreeItem::getAllTestConfigurations() const
         });
         if (funcChildren) {
             testsPerProjectfile[item->proFile()].testCases += funcChildren;
-            testsPerProjectfile[item->proFile()].internalTargets.unite(item->internalTargets());
+            testsPerProjectfile[item->proFile()].internalTargets.unite(CppTestTreeItem::internalTargets(item->filePath()));
         }
     });
 
@@ -244,7 +244,7 @@ QList<TestConfiguration *> BoostTestTreeItem::getTestConfigurations(
             tcName = handleSpecialFunctionNames(tcName);
             testCasesForProjectFile[item->proFile()].testCases.append(
                         item->prependWithParentsSuitePaths(tcName));
-            testCasesForProjectFile[item->proFile()].internalTargets.unite(item->internalTargets());
+            testCasesForProjectFile[item->proFile()].internalTargets.unite(CppTestTreeItem::internalTargets(item->filePath()));
         }
     });
 
@@ -313,7 +313,7 @@ TestConfiguration *BoostTestTreeItem::testConfiguration() const
         config->setProjectFile(proFile());
         config->setProject(project);
         config->setTestCases(testCases);
-        config->setInternalTargets(internalTargets());
+        config->setInternalTargets(CppTestTreeItem::internalTargets(filePath()));
         return config;
     }
     return nullptr;
