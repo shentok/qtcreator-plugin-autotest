@@ -27,6 +27,8 @@
 
 #include "../itestparser.h"
 
+#include "qttesttreeitem.h"
+
 namespace Autotest {
 namespace Internal {
 
@@ -52,6 +54,8 @@ public:
                          const QString &fileName) override;
 
 private:
+    QString testClass(const CppTools::CppModelManager *modelManager, const QString &fileName) const;
+    QHash<QString, QtTestCodeLocationList> checkForDataTags(const QString &fileName) const;
     QHash<QString, QString> m_testCaseNames;
     QMultiHash<QString, QString> m_alternativeFiles;
 };
