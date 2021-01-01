@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "catchframework.h"
 #include "catchtreeitem.h"
 #include "../itestparser.h"
 
@@ -33,19 +34,25 @@ namespace Internal {
 class CatchParseResult : public TestParseResult
 {
 public:
-    explicit CatchParseResult(ITestFramework *framework)
-        : TestParseResult(framework) {}
+    explicit CatchParseResult(CatchFramework *framework)
+        : TestParseResult(), m_framework(framework) {}
     TestTreeItem *createTestTreeItem() const override;
+    ITestFramework *framework() const override { return m_framework; }
     CatchTreeItem::TestStates states;
+private:
+    CatchFramework *m_framework;
 };
 
 class CatchTestParser : public CppParser
 {
 public:
-    CatchTestParser(ITestFramework *framework)
-        : CppParser(framework) {}
+    explicit CatchTestParser(CatchFramework *framework)
+        : CppParser(), m_framework(framework) {}
     bool processDocument(QFutureInterface<TestParseResultPtr> futureInterface,
                          const QString &fileName) override;
+    ITestFramework *framework() const override { return m_framework; }
+private:
+    CatchFramework *m_framework;
 };
 
 } // namespace Internal

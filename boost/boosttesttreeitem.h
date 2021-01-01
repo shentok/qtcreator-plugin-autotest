@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "boosttestframework.h"
 #include "../testtreeitem.h"
 
 namespace Autotest {
@@ -48,15 +49,16 @@ public:
     Q_FLAGS(TestState)
     Q_DECLARE_FLAGS(TestStates, TestState)
 
-    explicit BoostTestTreeItem(ITestFramework *framework,
+    explicit BoostTestTreeItem(BoostTestFramework *framework,
                                const QString &name = QString(),
                                const QString &filePath = QString(),
                                Type type = Root)
-        : TestTreeItem(framework, name, filePath, type)
+        : TestTreeItem(name, filePath, type), m_framework(framework)
     {}
 
 public:
     TestTreeItem *copyWithoutChildren() override;
+    ITestFramework *framework() const override { return m_framework; }
     QVariant data(int column, int role) const override;
     TestTreeItem *find(const TestParseResult *result) override;
     TestTreeItem *findChild(const TestTreeItem *other) override;
@@ -87,6 +89,7 @@ private:
     QList<TestConfiguration *> getTestConfigurations(
             std::function<bool(BoostTestTreeItem *)> predicate) const;
     bool modifyTestContent(const BoostTestParseResult *result);
+    mutable BoostTestFramework *m_framework;
     TestStates m_state = Enabled;
     QString m_fullName;
 };

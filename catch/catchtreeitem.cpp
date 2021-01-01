@@ -75,7 +75,7 @@ QVariant CatchTreeItem::data(int column, int role) const
 
 TestTreeItem *CatchTreeItem::copyWithoutChildren()
 {
-    CatchTreeItem *copied = new CatchTreeItem(framework());
+    CatchTreeItem *copied = new CatchTreeItem(m_framework);
     copied->copyBasicDataFrom(this);
     return copied;
 }
@@ -86,7 +86,7 @@ TestTreeItem *CatchTreeItem::find(const TestParseResult *result)
 
     switch (type()) {
     case Root:
-        if (framework()->grouping()) {
+        if (m_framework->grouping()) {
             const QString path = QFileInfo(result->fileName).absolutePath();
             for (int row = 0; row < childCount(); ++row) {
                 TestTreeItem *group = childAt(row);
@@ -140,7 +140,7 @@ TestTreeItem *CatchTreeItem::createParentGroupNode() const
 {
     const QFileInfo fileInfo(filePath());
     const QFileInfo base(fileInfo.absolutePath());
-    return new CatchTreeItem(framework(), base.baseName(), fileInfo.absolutePath(), TestTreeItem::GroupNode);
+    return new CatchTreeItem(m_framework, base.baseName(), fileInfo.absolutePath(), TestTreeItem::GroupNode);
 }
 
 bool CatchTreeItem::canProvideTestConfiguration() const
@@ -162,7 +162,7 @@ TestConfiguration *CatchTreeItem::testConfiguration() const
         return nullptr;
 
     CatchConfiguration *config = nullptr;
-    config = new CatchConfiguration(framework());
+    config = new CatchConfiguration(m_framework);
     config->setTestCaseCount(childCount());
     config->setProjectFile(proFile());
     config->setProject(project);
@@ -262,7 +262,7 @@ QList<TestConfiguration *> CatchTreeItem::getFailedTestConfigurations() const
 
     for (auto it = testCasesForProFile.begin(), end = testCasesForProFile.end(); it != end; ++it) {
         for (const QString &target : qAsConst(it.value().internalTargets)) {
-            CatchConfiguration *tc = new CatchConfiguration(framework());
+            CatchConfiguration *tc = new CatchConfiguration(m_framework);
             tc->setTestCases(it.value().names);
             tc->setProjectFile(it.key());
             tc->setProject(project);
@@ -297,7 +297,7 @@ QList<TestConfiguration *> CatchTreeItem::getTestConfigurationsForFile(const Uti
             testCases << current->testCasesString();
         });
 
-        testConfig = new CatchConfiguration(framework());
+        testConfig = new CatchConfiguration(m_framework);
         testConfig->setTestCases(testCases);
         testConfig->setProjectFile(item->proFile());
         testConfig->setProject(ProjectExplorer::SessionManager::startupProject());
@@ -332,7 +332,7 @@ QList<TestConfiguration *> CatchTreeItem::getTestConfigurations(bool ignoreCheck
 
     for (auto it = testCasesForProfile.begin(), end = testCasesForProfile.end(); it != end; ++it) {
         for (const QString &target : qAsConst(it.value().internalTargets)) {
-            CatchConfiguration *tc = new CatchConfiguration(framework());
+            CatchConfiguration *tc = new CatchConfiguration(m_framework);
             tc->setTestCases(it.value().names);
             if (ignoreCheckState)
                 tc->setTestCaseCount(0);

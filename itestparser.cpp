@@ -31,11 +31,6 @@
 
 namespace Autotest {
 
-CppParser::CppParser(ITestFramework *framework)
-    : ITestParser(framework)
-{
-}
-
 void CppParser::init(const QStringList &filesToParse, bool fullParse)
 {
     Q_UNUSED(filesToParse)

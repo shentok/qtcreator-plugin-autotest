@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "gtestframework.h"
 #include "../testtreeitem.h"
 
 namespace Autotest {
@@ -46,14 +47,15 @@ public:
     Q_FLAGS(TestState)
     Q_DECLARE_FLAGS(TestStates, TestState)
 
-    explicit GTestTreeItem(ITestFramework *framework,
+    explicit GTestTreeItem(GTestFramework *framework,
                            const QString &name = QString(),
                            const QString &filePath = QString(),
                            Type type = Root)
-        : TestTreeItem(framework, name, filePath, type), m_state(Enabled)
+        : TestTreeItem(name, filePath, type), m_framework(framework), m_state(Enabled)
     {}
 
     TestTreeItem *copyWithoutChildren() override;
+    ITestFramework *framework() const override { return m_framework; }
     QVariant data(int column, int role) const override;
     bool canProvideTestConfiguration() const override { return type() != Root; }
     bool canProvideDebugConfiguration() const override { return type() != Root; }
@@ -82,6 +84,7 @@ public:
 private:
     bool modifyTestSetContent(const GTestParseResult *result);
     QList<TestConfiguration *> getTestConfigurations(bool ignoreCheckState) const;
+    GTestFramework *m_framework = nullptr;
     GTestTreeItem::TestStates m_state;
 };
 

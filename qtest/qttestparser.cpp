@@ -40,7 +40,7 @@ TestTreeItem *QtTestParseResult::createTestTreeItem() const
     if (itemType == TestTreeItem::Root)
         return nullptr;
 
-    QtTestTreeItem *item = new QtTestTreeItem(framework, displayName, fileName, itemType);
+    QtTestTreeItem *item = new QtTestTreeItem(m_framework, displayName, fileName, itemType);
     item->setProFile(proFile);
     item->setLine(line);
     item->setColumn(column);
@@ -321,7 +321,7 @@ bool QtTestParser::processDocument(QFutureInterface<TestParseResultPtr> futureIn
         for (const QString &file : files)
             Utils::addToHash(&dataTags, checkForDataTags(file));
 
-        QtTestParseResult *parseResult = new QtTestParseResult(framework());
+        QtTestParseResult *parseResult = new QtTestParseResult(m_framework);
         parseResult->itemType = TestTreeItem::TestCase;
         parseResult->fileName = declaringDoc->fileName();
         parseResult->name = testCaseName;
@@ -338,7 +338,7 @@ bool QtTestParser::processDocument(QFutureInterface<TestParseResultPtr> futureIn
             const QtTestCodeLocationAndType &location = it.value();
             QString functionName = it.key();
             functionName = functionName.mid(functionName.lastIndexOf(':') + 1);
-            QtTestParseResult *func = new QtTestParseResult(framework());
+            QtTestParseResult *func = new QtTestParseResult(m_framework);
             func->itemType = location.m_type;
             func->name = testCaseName + "::" + functionName;
             func->displayName = functionName;
@@ -349,7 +349,7 @@ bool QtTestParser::processDocument(QFutureInterface<TestParseResultPtr> futureIn
 
             const QtTestCodeLocationList &tagLocations = tagLocationsFor(func, dataTags);
             for (const QtTestCodeLocationAndType &tag : tagLocations) {
-                QtTestParseResult *dataTag = new QtTestParseResult(framework());
+                QtTestParseResult *dataTag = new QtTestParseResult(m_framework);
                 dataTag->itemType = tag.m_type;
                 dataTag->name = tag.m_name;
                 dataTag->displayName = tag.m_name;
@@ -372,8 +372,8 @@ bool QtTestParser::processDocument(QFutureInterface<TestParseResultPtr> futureIn
 void QtTestParser::init(const QStringList &filesToParse, bool fullParse)
 {
     if (!fullParse) { // in a full parse cached information might lead to wrong results
-        m_testCaseNames = QTestUtils::testCaseNamesForFiles(framework(), filesToParse);
-        m_alternativeFiles = QTestUtils::alternativeFiles(framework(), filesToParse);
+        m_testCaseNames = QTestUtils::testCaseNamesForFiles(m_framework, filesToParse);
+        m_alternativeFiles = QTestUtils::alternativeFiles(m_framework, filesToParse);
     }
     CppParser::init(filesToParse, fullParse);
 }

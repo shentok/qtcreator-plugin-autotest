@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "gtestframework.h"
 #include "../itestparser.h"
 
 namespace Autotest {
@@ -33,19 +34,25 @@ namespace Internal {
 class GTestParseResult : public TestParseResult
 {
 public:
-    explicit GTestParseResult(ITestFramework *framework) : TestParseResult(framework) {}
+    explicit GTestParseResult(GTestFramework *framework) : TestParseResult(), m_framework(framework) {}
     TestTreeItem *createTestTreeItem() const override;
+    ITestFramework *framework() const override { return m_framework; }
     bool parameterized = false;
     bool typed = false;
     bool disabled = false;
+private:
+    GTestFramework *m_framework;
 };
 
 class GTestParser : public CppParser
 {
 public:
-    explicit GTestParser(ITestFramework *framework) : CppParser(framework) {}
+    explicit GTestParser(GTestFramework *framework) : CppParser(), m_framework(framework) {}
     bool processDocument(QFutureInterface<TestParseResultPtr> futureInterface,
                          const QString &fileName) override;
+    ITestFramework *framework() const override { return m_framework; }
+private:
+    GTestFramework *m_framework;
 };
 
 } // namespace Internal

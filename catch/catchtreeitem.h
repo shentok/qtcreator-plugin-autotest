@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "catchframework.h"
 #include "../testtreeitem.h"
 
 namespace Autotest {
@@ -41,9 +42,9 @@ public:
     Q_FLAGS(TestState)
     Q_DECLARE_FLAGS(TestStates, TestState)
 
-    explicit CatchTreeItem(ITestFramework *framework, const QString &name = QString(),
+    explicit CatchTreeItem(CatchFramework *framework, const QString &name = QString(),
                            const QString &filePath = QString(), Type type = Root)
-        : TestTreeItem(framework, name, filePath, type) {}
+        : TestTreeItem(name, filePath, type), m_framework(framework) {}
 
     void setStates(CatchTreeItem::TestStates state) { m_state = state; }
     CatchTreeItem::TestStates states() const { return m_state; }
@@ -52,6 +53,7 @@ public:
     QVariant data(int column, int role) const override;
 
     TestTreeItem *copyWithoutChildren() override;
+    ITestFramework *framework() const override { return m_framework; }
     TestTreeItem *find(const TestParseResult *result) override;
     TestTreeItem *findChild(const TestTreeItem *other) override;
     bool modify(const TestParseResult *result) override;
@@ -69,6 +71,7 @@ public:
 private:
     QString stateSuffix() const;
     QList<TestConfiguration *> getTestConfigurations(bool ignoreCheckState) const;
+    CatchFramework *m_framework = nullptr;
     TestStates m_state = Normal;
 };
 

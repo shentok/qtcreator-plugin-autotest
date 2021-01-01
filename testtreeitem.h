@@ -73,12 +73,12 @@ public:
         Naturally
     };
 
-    explicit TestTreeItem(ITestFramework *framework,
-                          const QString &name = QString(),
+    explicit TestTreeItem(const QString &name = QString(),
                           const QString &filePath = QString(),
                           Type type = Root);
 
     virtual TestTreeItem *copyWithoutChildren() = 0;
+    virtual ITestFramework *framework() const = 0;
     virtual QVariant data(int column, int role) const override;
     virtual bool setData(int column, const QVariant &data, int role) override;
     virtual Qt::ItemFlags flags(int column) const override;
@@ -87,7 +87,6 @@ public:
     bool modifyDataTagContent(const TestParseResult *result);
     bool modifyLineAndColumn(const TestParseResult *result);
 
-    ITestFramework *framework() const;
     const QString name() const { return m_name; }
     void setName(const QString &name) { m_name = name; }
     const QString filePath() const { return m_filePath; }
@@ -151,7 +150,6 @@ private:
         Cleared
     };
 
-    ITestFramework *m_framework = nullptr;
     QString m_name;
     QString m_filePath;
     Qt::CheckState m_checked;

@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "qttestframework.h"
 #include "../testtreeitem.h"
 
 namespace Autotest {
@@ -33,10 +34,11 @@ namespace Internal {
 class QtTestTreeItem : public TestTreeItem
 {
 public:
-    explicit QtTestTreeItem(ITestFramework *framework, const QString &name = QString(), const QString &filePath = QString(),
+    explicit QtTestTreeItem(QtTestFramework *framework, const QString &name = QString(), const QString &filePath = QString(),
                             Type type = Root);
 
     TestTreeItem *copyWithoutChildren() override;
+    ITestFramework *framework() const override { return m_framework; }
     QVariant data(int column, int role) const override;
     Qt::ItemFlags flags(int column) const override;
     bool canProvideTestConfiguration() const override;
@@ -57,6 +59,7 @@ public:
 private:
     TestTreeItem *findChildByNameAndInheritance(const QString &name, bool inherited) const;
     QString nameSuffix() const;
+    mutable QtTestFramework *m_framework = nullptr;
     bool m_inherited = false;
 };
 

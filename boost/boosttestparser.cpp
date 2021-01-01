@@ -56,7 +56,7 @@ TestTreeItem *BoostTestParseResult::createTestTreeItem() const
     if (itemType == TestTreeItem::Root)
         return nullptr;
 
-    BoostTestTreeItem *item = new BoostTestTreeItem(framework, displayName, fileName, itemType);
+    BoostTestTreeItem *item = new BoostTestTreeItem(m_framework, displayName, fileName, itemType);
     item->setProFile(proFile);
     item->setLine(line);
     item->setColumn(column);
@@ -98,7 +98,7 @@ static bool hasBoostTestMacros(const CPlusPlus::Document::Ptr &doc)
 }
 
 static BoostTestParseResult *createParseResult(const QString &name, const QString &filePath,
-                                               const QString &projectFile, ITestFramework *framework,
+                                               const QString &projectFile, BoostTestFramework *framework,
                                                TestTreeItem::Type type, const BoostTestInfo &info)
 {
     BoostTestParseResult *partialSuite = new BoostTestParseResult(framework);
@@ -141,7 +141,7 @@ bool BoostTestParser::processDocument(QFutureInterface<TestParseResultPtr> futur
         BoostTestInfo firstSuite = suitesStates.first();
         QStringList suites = firstSuite.fullName.split('/');
         BoostTestParseResult *topLevelSuite = createParseResult(suites.first(), filePath,
-                                                                projectFile, framework(),
+                                                                projectFile, m_framework,
                                                                 TestTreeItem::TestSuite,
                                                                 firstSuite);
         BoostTestParseResult *currentSuite = topLevelSuite;
@@ -150,7 +150,7 @@ bool BoostTestParser::processDocument(QFutureInterface<TestParseResultPtr> futur
             firstSuite = suitesStates.first();
             suites = firstSuite.fullName.split('/');
             BoostTestParseResult *suiteResult = createParseResult(suites.last(), filePath,
-                                                                  projectFile, framework(),
+                                                                  projectFile, m_framework,
                                                                   TestTreeItem::TestSuite,
                                                                   firstSuite);
             currentSuite->children.append(suiteResult);
@@ -163,7 +163,7 @@ bool BoostTestParser::processDocument(QFutureInterface<TestParseResultPtr> futur
                 locationAndType.m_suitesState.last().fullName + "::" + locationAndType.m_name,
                         locationAndType.m_state, locationAndType.m_line};
             BoostTestParseResult *funcResult = createParseResult(locationAndType.m_name, filePath,
-                                                                 projectFile, framework(),
+                                                                 projectFile, m_framework,
                                                                  locationAndType.m_type,
                                                                  tmpInfo);
             currentSuite->children.append(funcResult);

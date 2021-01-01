@@ -38,7 +38,7 @@ TestTreeItem *GTestParseResult::createTestTreeItem() const
 {
     if (itemType != TestTreeItem::TestSuite && itemType != TestTreeItem::TestCase)
         return nullptr;
-    GTestTreeItem *item = new GTestTreeItem(framework, name, fileName, itemType);
+    GTestTreeItem *item = new GTestTreeItem(m_framework, name, fileName, itemType);
     item->setProFile(proFile);
     item->setLine(line);
     item->setColumn(column);
@@ -111,7 +111,7 @@ bool GTestParser::processDocument(QFutureInterface<TestParseResultPtr> futureInt
         return false; // happens if shutting down while parsing
 
     for (const GTestCaseSpec &testSpec : result.keys()) {
-        GTestParseResult *parseResult = new GTestParseResult(framework());
+        GTestParseResult *parseResult = new GTestParseResult(m_framework);
         parseResult->itemType = TestTreeItem::TestSuite;
         parseResult->fileName = filePath;
         parseResult->name = testSpec.testCaseName;
@@ -121,7 +121,7 @@ bool GTestParser::processDocument(QFutureInterface<TestParseResultPtr> futureInt
         parseResult->proFile = proFile;
 
         for (const GTestCodeLocationAndType &location : result.value(testSpec)) {
-            GTestParseResult *testSet = new GTestParseResult(framework());
+            GTestParseResult *testSet = new GTestParseResult(m_framework);
             testSet->name = location.m_name;
             testSet->fileName = filePath;
             testSet->line = location.m_line;

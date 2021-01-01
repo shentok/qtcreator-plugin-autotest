@@ -40,7 +40,7 @@ QSet<QString> internalTargets(const QString &proFile);
 
 TestTreeItem *QuickTestTreeItem::copyWithoutChildren()
 {
-    QuickTestTreeItem *copied = new QuickTestTreeItem(framework());
+    QuickTestTreeItem *copied = new QuickTestTreeItem(m_framework);
     copied->copyBasicDataFrom(this);
     return copied;
 }
@@ -139,7 +139,7 @@ TestConfiguration *QuickTestTreeItem::testConfiguration() const
             if (child->type() == TestTreeItem::TestFunction)
                 testFunctions << testName + "::" + child->name();
         });
-        config = new QuickTestConfiguration(framework());
+        config = new QuickTestConfiguration(m_framework);
         config->setTestCases(testFunctions);
         config->setProjectFile(proFile());
         config->setProject(project);
@@ -148,7 +148,7 @@ TestConfiguration *QuickTestTreeItem::testConfiguration() const
     case TestFunction: {
         TestTreeItem *parent = parentItem();
         QStringList testFunction(parent->name() + "::" + name());
-        config = new QuickTestConfiguration(framework());
+        config = new QuickTestConfiguration(m_framework);
         config->setTestCases(testFunction);
         config->setProjectFile(parent->proFile());
         config->setProject(project);
@@ -251,7 +251,7 @@ QList<TestConfiguration *> QuickTestTreeItem::getAllTestConfigurations() const
     });
     // create TestConfiguration for each project file
     for (auto it = testsForProfile.begin(), end = testsForProfile.end(); it != end; ++it) {
-        QuickTestConfiguration *tc = new QuickTestConfiguration(framework());
+        QuickTestConfiguration *tc = new QuickTestConfiguration(m_framework);
         tc->setTestCaseCount(it.value().testCount);
         tc->setProjectFile(it.key());
         tc->setProject(project);
@@ -292,7 +292,7 @@ TestTreeItem *QuickTestTreeItem::find(const TestParseResult *result)
     case Root:
         if (result->name.isEmpty())
             return unnamedQuickTests();
-        if (framework()->grouping()) {
+        if (m_framework->grouping()) {
             const QString path = QFileInfo(result->fileName).absolutePath();
             TestTreeItem *group = findFirstLevelChild([path](TestTreeItem *group) {
                     return group->filePath() == path;
@@ -378,7 +378,7 @@ TestTreeItem *QuickTestTreeItem::createParentGroupNode() const
 {
     const QFileInfo fileInfo(filePath());
     const QFileInfo base(fileInfo.absolutePath());
-    return new QuickTestTreeItem(framework(), base.baseName(), fileInfo.absolutePath(), TestTreeItem::GroupNode);
+    return new QuickTestTreeItem(m_framework, base.baseName(), fileInfo.absolutePath(), TestTreeItem::GroupNode);
 }
 
 bool QuickTestTreeItem::isGroupable() const
@@ -403,10 +403,10 @@ QSet<QString> internalTargets(const QString &proFile)
 void QuickTestTreeItem::markForRemovalRecursively(const QString &filePath)
 {
     TestTreeItem::markForRemovalRecursively(filePath);
-    auto parser = dynamic_cast<QuickTestParser *>(framework()->testParser());
+    auto parser = dynamic_cast<QuickTestParser *>(m_framework->testParser());
     const QString proFile = parser->projectFileForMainCppFile(filePath);
     if (!proFile.isEmpty()) {
-        TestTreeItem *root = framework()->rootNode();
+        TestTreeItem *root = m_framework->rootNode();
         root->forAllChildren([proFile](TestTreeItem *it) {
             if (it->proFile() == proFile)
                 it->markForRemoval(true);

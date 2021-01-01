@@ -115,7 +115,7 @@ bool CatchTestParser::processDocument(QFutureInterface<TestParseResultPtr> futur
     CatchCodeParser codeParser(fileContent, projectPart->languageFeatures);
     const CatchTestCodeLocationList foundTests = codeParser.findTests();
 
-    CatchParseResult *parseResult = new CatchParseResult(framework());
+    CatchParseResult *parseResult = new CatchParseResult(m_framework);
     parseResult->itemType = TestTreeItem::TestSuite;
     parseResult->fileName = filePath;
     parseResult->name = filePath;
@@ -123,7 +123,7 @@ bool CatchTestParser::processDocument(QFutureInterface<TestParseResultPtr> futur
     parseResult->proFile = projectParts.first()->projectFile;
 
     for (const CatchTestCodeLocationAndType & testLocation : foundTests) {
-        CatchParseResult *testCase = new CatchParseResult(framework());
+        CatchParseResult *testCase = new CatchParseResult(m_framework);
         testCase->fileName = filePath;
         testCase->name = testLocation.m_name;
         testCase->proFile = proFile;
@@ -145,7 +145,7 @@ TestTreeItem *CatchParseResult::createTestTreeItem() const
     if (itemType == TestTreeItem::Root)
         return nullptr;
 
-    CatchTreeItem *item = new CatchTreeItem(framework, name, fileName, itemType);
+    CatchTreeItem *item = new CatchTreeItem(m_framework, name, fileName, itemType);
     item->setProFile(proFile);
     item->setLine(line);
     item->setColumn(column);

@@ -27,6 +27,7 @@
 
 #include "../itestparser.h"
 
+#include "qttestframework.h"
 #include "qttesttreeitem.h"
 
 namespace Autotest {
@@ -35,27 +36,30 @@ namespace Internal {
 class QtTestParseResult : public TestParseResult
 {
 public:
-    explicit QtTestParseResult(ITestFramework *framework) : TestParseResult(framework) {}
+    explicit QtTestParseResult(QtTestFramework *framework) : TestParseResult(), m_framework(framework) {}
     void setInherited(bool inherited) { m_inherited = inherited; }
     bool inherited() const { return m_inherited; }
     TestTreeItem *createTestTreeItem() const override;
+    ITestFramework *framework() const override { return m_framework; }
 private:
+    QtTestFramework *m_framework;
     bool m_inherited = false;
 };
 
 class QtTestParser : public CppParser
 {
 public:
-    explicit QtTestParser(ITestFramework *framework) : CppParser(framework) {}
+    explicit QtTestParser(QtTestFramework *framework) : CppParser(), m_framework(framework) {}
 
     void init(const QStringList &filesToParse, bool fullParse) override;
     void release() override;
     bool processDocument(QFutureInterface<TestParseResultPtr> futureInterface,
                          const QString &fileName) override;
-
+    ITestFramework *framework() const override { return m_framework; }
 private:
     QString testClass(const CppTools::CppModelManager *modelManager, const QString &fileName) const;
     QHash<QString, QtTestCodeLocationList> checkForDataTags(const QString &fileName) const;
+    QtTestFramework *m_framework;
     QHash<QString, QString> m_testCaseNames;
     QMultiHash<QString, QString> m_alternativeFiles;
 };

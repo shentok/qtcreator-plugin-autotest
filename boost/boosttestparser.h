@@ -26,6 +26,7 @@
 #pragma once
 
 #include "../itestparser.h"
+#include "boosttestframework.h"
 #include "boosttesttreeitem.h"
 
 namespace Autotest {
@@ -34,18 +35,24 @@ namespace Internal {
 class BoostTestParseResult : public TestParseResult
 {
 public:
-    explicit BoostTestParseResult(ITestFramework *framework) : TestParseResult(framework) {}
+    explicit BoostTestParseResult(BoostTestFramework *framework) : TestParseResult(), m_framework(framework) {}
     TestTreeItem *createTestTreeItem() const override;
+    ITestFramework *framework() const override { return m_framework; }
     // TODO special attributes/states (labeled, timeout,...?)
     BoostTestTreeItem::TestStates state = BoostTestTreeItem::Enabled;
+private:
+    BoostTestFramework *m_framework;
 };
 
 class BoostTestParser : public CppParser
 {
 public:
-    explicit BoostTestParser(ITestFramework *framework) : CppParser(framework) {}
+    explicit BoostTestParser(BoostTestFramework *framework) : CppParser(), m_framework(framework) {}
     bool processDocument(QFutureInterface<TestParseResultPtr> futureInterface,
                          const QString &fileName) override;
+    ITestFramework *framework() const override { return m_framework; }
+private:
+    BoostTestFramework *m_framework;
 };
 
 } // namespace Internal

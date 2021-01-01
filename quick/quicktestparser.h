@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "quicktestframework.h"
 #include "../itestparser.h"
 
 #include <qmljs/qmljsdocument.h>
@@ -37,27 +38,33 @@ namespace Internal {
 class QuickTestParseResult : public TestParseResult
 {
 public:
-    explicit QuickTestParseResult(ITestFramework *framework) : TestParseResult(framework) {}
+    explicit QuickTestParseResult(QuickTestFramework *framework) : TestParseResult(), m_framework(framework) {}
     TestTreeItem *createTestTreeItem() const override;
+    ITestFramework *framework() const override { return m_framework; }
+
+private:
+    QuickTestFramework *m_framework;
 };
 
 class QuickTestParser : public QObject, public CppParser
 {
     Q_OBJECT
 public:
-    explicit QuickTestParser(ITestFramework *framework);
+    explicit QuickTestParser(QuickTestFramework *framework);
     void init(const QStringList &filesToParse, bool fullParse) override;
     void release() override;
     bool processDocument(QFutureInterface<TestParseResultPtr> futureInterface,
                          const QString &fileName) override;
+    ITestFramework *framework() const override { return m_framework; }
     QString projectFileForMainCppFile(const QString &fileName) const;
 private:
     bool handleQtQuickTest(QFutureInterface<TestParseResultPtr> futureInterface,
-                           CPlusPlus::Document::Ptr document, ITestFramework *framework);
+                           CPlusPlus::Document::Ptr document);
     void handleDirectoryChanged(const QString &directory);
     void doUpdateWatchPaths(const QStringList &directories);
     QString quickTestName(const CPlusPlus::Document::Ptr &doc) const;
     QList<QmlJS::Document::Ptr> scanDirectoryForQuickTestQmlFiles(const QString &srcDir);
+    QuickTestFramework *m_framework;
     QmlJS::Snapshot m_qmlSnapshot;
     QHash<QString, QString> m_proFilesForQmlFiles;
     QFileSystemWatcher m_directoryWatcher;
