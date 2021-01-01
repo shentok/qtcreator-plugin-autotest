@@ -97,11 +97,11 @@ TestNavigationWidget::TestNavigationWidget(QWidget *parent) :
     m_progressTimer->setSingleShot(true);
     m_progressTimer->setInterval(1000); // don't display indicator if progress takes less than 1s
 
-    connect(m_model->parser(), &TestCodeParser::parsingStarted,
+    connect(m_model, &TestTreeModel::parsingStarted,
             this, &TestNavigationWidget::onParsingStarted);
-    connect(m_model->parser(), &TestCodeParser::parsingFinished,
+    connect(m_model, &TestTreeModel::parsingFinished,
             this, &TestNavigationWidget::onParsingFinished);
-    connect(m_model->parser(), &TestCodeParser::parsingFailed,
+    connect(m_model, &TestTreeModel::parsingFailed,
             this, &TestNavigationWidget::onParsingFinished);
     connect(m_model, &TestTreeModel::updatedActiveFrameworks,
             this, [this] (int numberOfActive) {
@@ -124,7 +124,7 @@ void TestNavigationWidget::contextMenuEvent(QContextMenuEvent *event)
 {
     const bool enabled = !ProjectExplorer::BuildManager::isBuilding()
             && !TestRunner::instance()->isTestRunning()
-            && m_model->parser()->state() == TestCodeParser::Idle;
+            && m_model->state() == TestCodeParser::Idle;
 
     QMenu menu;
     QAction *runThisTest = nullptr;

@@ -28,6 +28,7 @@
 #include "autotest_global.h"
 
 #include "itemdatacache.h"
+#include "testcodeparser.h"
 #include "testconfiguration.h"
 #include "testtreeitem.h"
 
@@ -39,7 +40,6 @@
 namespace Autotest {
 namespace Internal {
 class AutotestPluginPrivate;
-class TestCodeParser;
 } // namespace Internal
 
 class TestParseResult;
@@ -59,7 +59,7 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-    Internal::TestCodeParser *parser() const { return m_parser; }
+    Internal::TestCodeParser::State state() const { return m_parser->state(); }
     bool hasTests() const;
     QList<TestConfiguration *> getAllTestCases() const;
     QList<TestConfiguration *> getSelectedTests() const;
@@ -92,6 +92,9 @@ public:
 signals:
     void testTreeModelChanged();
     void updatedActiveFrameworks(int numberOfActiveFrameworks);
+    void parsingStarted();
+    void parsingFinished();
+    void parsingFailed();
 #ifdef WITH_TESTS
     void sweepingDone();
 #endif

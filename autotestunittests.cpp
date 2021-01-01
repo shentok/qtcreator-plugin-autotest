@@ -109,7 +109,7 @@ void AutoTestUnitTests::testCodeParser()
     const CppTools::ProjectInfo projectInfo = projectManager.open(projectFilePath, true, m_kit);
     QVERIFY(projectInfo.isValid());
 
-    QSignalSpy parserSpy(m_model->parser(), SIGNAL(parsingFinished()));
+    QSignalSpy parserSpy(m_model, SIGNAL(parsingFinished()));
     QSignalSpy modelUpdateSpy(m_model, SIGNAL(sweepingDone()));
     QVERIFY(parserSpy.wait(20000));
     QVERIFY(modelUpdateSpy.wait());
@@ -160,7 +160,7 @@ void AutoTestUnitTests::testCodeParserSwitchStartup()
         CppTools::ProjectInfo projectInfo = projectManager.open(projectFilePaths.at(i), true, m_kit);
         QVERIFY(projectInfo.isValid());
 
-        QSignalSpy parserSpy(m_model->parser(), SIGNAL(parsingFinished()));
+        QSignalSpy parserSpy(m_model, SIGNAL(parsingFinished()));
         QSignalSpy modelUpdateSpy(m_model, SIGNAL(sweepingDone()));
         QVERIFY(parserSpy.wait(20000));
         QVERIFY(modelUpdateSpy.wait());
@@ -208,7 +208,7 @@ void AutoTestUnitTests::testCodeParserGTest()
     CppTools::ProjectInfo projectInfo = projectManager.open(projectFilePath, true, m_kit);
     QVERIFY(projectInfo.isValid());
 
-    QSignalSpy parserSpy(m_model->parser(), SIGNAL(parsingFinished()));
+    QSignalSpy parserSpy(m_model, SIGNAL(parsingFinished()));
     QSignalSpy modelUpdateSpy(m_model, SIGNAL(sweepingDone()));
     QVERIFY(parserSpy.wait(20000));
     QVERIFY(modelUpdateSpy.wait());
@@ -257,7 +257,7 @@ void AutoTestUnitTests::testCodeParserBoostTest()
     CppTools::ProjectInfo projectInfo = projectManager.open(projectFilePath, true, m_kit);
     QVERIFY(projectInfo.isValid());
 
-    QSignalSpy parserSpy(m_model->parser(), SIGNAL(parsingFinished()));
+    QSignalSpy parserSpy(m_model, SIGNAL(parsingFinished()));
     QSignalSpy modelUpdateSpy(m_model, SIGNAL(sweepingDone()));
     QVERIFY(parserSpy.wait(20000));
     QVERIFY(modelUpdateSpy.wait());

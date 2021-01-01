@@ -65,6 +65,12 @@ TestTreeModel::TestTreeModel(TestCodeParser *parser) :
             this, &TestTreeModel::markAllForRemoval);
     connect(m_parser, &TestCodeParser::requestRemoval,
             this, &TestTreeModel::markForRemoval);
+    connect(m_parser, &TestCodeParser::parsingStarted,
+            this, &TestTreeModel::parsingStarted);
+    connect(m_parser, &TestCodeParser::parsingFinished,
+            this, &TestTreeModel::parsingFinished);
+    connect(m_parser, &TestCodeParser::parsingFailed,
+            this, &TestTreeModel::parsingFailed);
     connect(this, &QAbstractItemModel::dataChanged,
             this, &TestTreeModel::onDataChanged);
     setupParsingConnections();
