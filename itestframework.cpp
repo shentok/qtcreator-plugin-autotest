@@ -24,7 +24,9 @@
 ****************************************************************************/
 
 #include "itestframework.h"
+#include "autotestconstants.h"
 #include "itestparser.h"
+#include "testtreemodel.h"
 
 namespace Autotest {
 

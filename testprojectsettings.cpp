@@ -30,6 +30,8 @@
 #include <projectexplorer/session.h>
 #include <utils/algorithm.h>
 
+#include <QLoggingCategory>
+
 namespace Autotest {
 namespace Internal {
 

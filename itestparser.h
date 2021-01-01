@@ -26,12 +26,13 @@
 #pragma once
 
 #include "testtreeitem.h"
-#include "testtreemodel.h"
 
 #include <utils/id.h>
 #include <cplusplus/CppDocument.h>
 #include <cpptools/cppworkingcopy.h>
 #include <qmljs/qmljsdocument.h>
+
+#include <QFutureInterface>
 
 namespace Autotest {
 

@@ -28,6 +28,7 @@
 #include "testcodeparser.h"
 #include "testframeworkmanager.h"
 #include "testsettings.h"
+#include "testtreemodel.h"
 
 #include <coreplugin/editormanager/editormanager.h>
 #include <coreplugin/progressmanager/futureprogress.h>

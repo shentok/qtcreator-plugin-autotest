@@ -38,6 +38,8 @@ QT_BEGIN_NAMESPACE
 class QThreadPool;
 QT_END_NAMESPACE
 
+namespace ProjectExplorer { class Project; }
+
 namespace Autotest {
 
 class ITestFramework;
