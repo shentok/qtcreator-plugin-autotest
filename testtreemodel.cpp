@@ -226,21 +226,20 @@ QList<TestTreeItem *> TestTreeModel::testItemsByName(const QString &testName)
 void TestTreeModel::synchronizeTestFrameworks()
 {
     ProjectExplorer::Project *project = ProjectExplorer::SessionManager::startupProject();
-    TestFrameworks sorted;
     const QVariant useGlobal = project ? project->namedSettings(Constants::SK_USE_GLOBAL)
                                        : QVariant();
-    if (!useGlobal.isValid() || AutotestPlugin::projectSettings(project)->useGlobalSettings()) {
-        sorted = Utils::filtered(TestFrameworkManager::registeredFrameworks(),
-                                 &ITestFramework::active);
-        qCDebug(LOG) << "Active frameworks sorted by priority" << sorted;
-    } else { // we've got custom project settings
+    std::function<bool (ITestFramework *)> predicate = &ITestFramework::active;
+    if (useGlobal.isValid() && !AutotestPlugin::projectSettings(project)->useGlobalSettings()) {
+        // we've got custom project settings
         const TestProjectSettings *settings = AutotestPlugin::projectSettings(project);
         const QHash<ITestFramework *, bool> active = settings->activeFrameworks();
-        sorted = Utils::filtered(TestFrameworkManager::registeredFrameworks(),
-                                 [active](ITestFramework *framework) {
+        predicate = [active](ITestFramework *framework) {
             return active.value(framework, false);
-        });
+        };
     }
+
+    const TestFrameworks sorted = Utils::filtered(TestFrameworkManager::registeredFrameworks(), predicate);
+    qCDebug(LOG) << "Active frameworks sorted by priority" << sorted;
 
     const auto sortedParsers = Utils::transform(sorted, &ITestFramework::testParser);
     // pre-check to avoid further processing when frameworks are unchanged
