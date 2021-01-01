@@ -43,6 +43,7 @@
 #include "quick/quicktestframework.h"
 #include "gtest/gtestframework.h"
 #include "boost/boosttestframework.h"
+#include "cargo/cargotestframework.h"
 #include "catch/catchframework.h"
 
 #include <coreplugin/icore.h>
@@ -136,6 +137,7 @@ AutotestPluginPrivate::AutotestPluginPrivate()
     m_frameworkManager.registerTestFramework(new QtTestFramework);
     m_frameworkManager.registerTestFramework(new QuickTestFramework);
     m_frameworkManager.registerTestFramework(new GTestFramework);
+    m_frameworkManager.registerTestFramework(new CargoTestFramework);
     m_frameworkManager.registerTestFramework(new BoostTestFramework);
     m_frameworkManager.registerTestFramework(new CatchFramework);
 

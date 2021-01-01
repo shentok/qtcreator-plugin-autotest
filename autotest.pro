@@ -68,6 +68,15 @@ SOURCES += \
     quick/quicktestvisitors.cpp \
     quick/quicktestframework.cpp \
     quick/quicktest_utils.cpp \
+    cargo/cargotesttreeitem.cpp \
+    cargo/cargotestconfiguration.cpp \
+    cargo/cargotestoutputreader.cpp \
+    cargo/cargotestresult.cpp \
+    cargo/cargotestframework.cpp \
+    cargo/cargotestparser.cpp \
+    cargo/cargotestsettings.cpp \
+    cargo/cargotestsettingspage.cpp \
+    cargo/cargotest_utils.cpp \
     boost/boostcodeparser.cpp \
     boost/boosttestframework.cpp \
     boost/boosttesttreeitem.cpp \
@@ -144,6 +153,16 @@ HEADERS += \
     quick/quicktest_utils.h \
     quick/quicktestvisitors.h \
     quick/quicktestframework.h \
+    cargo/cargotesttreeitem.h \
+    cargo/cargotest_utils.h \
+    cargo/cargotestresult.h \
+    cargo/cargotestconfiguration.h \
+    cargo/cargotestoutputreader.h \
+    cargo/cargotestframework.h \
+    cargo/cargotestparser.h \
+    cargo/cargotestsettings.h \
+    cargo/cargotestsettingspage.h \
+    cargo/cargotestconstants.h \
     boost/boostcodeparser.h \
     boost/boosttestframework.h \
     boost/boosttestconstants.h \
@@ -163,6 +182,7 @@ FORMS += \
     boost/boosttestsettingspage.ui \
     catch/catchtestsettingspage.ui \
     qtest/qttestsettingspage.ui \
+    cargo/cargotestsettingspage.ui \
     gtest/gtestsettingspage.ui
 
 equals(TEST, 1) {
