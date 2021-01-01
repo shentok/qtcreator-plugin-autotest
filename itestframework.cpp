@@ -36,7 +36,6 @@ ITestFramework::ITestFramework(bool activeByDefault)
 
 ITestFramework::~ITestFramework()
 {
-    delete m_testParser;
 }
 
 TestTreeItem *ITestFramework::rootNode()
@@ -45,13 +44,6 @@ TestTreeItem *ITestFramework::rootNode()
         m_rootNode = createRootNode();
     // These are stored in the TestTreeModel and destroyed on shutdown there.
     return m_rootNode;
-}
-
-ITestParser *ITestFramework::testParser()
-{
-    if (!m_testParser)
-        m_testParser = createTestParser();
-    return m_testParser;
 }
 
 Utils::Id ITestFramework::settingsId() const

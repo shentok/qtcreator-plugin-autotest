@@ -40,11 +40,6 @@ unsigned CatchFramework::priority() const
     return 12;
 }
 
-ITestParser *CatchFramework::createTestParser()
-{
-    return new CatchTestParser(this);
-}
-
 TestTreeItem *CatchFramework::createRootNode()
 {
     return new CatchTreeItem(this,

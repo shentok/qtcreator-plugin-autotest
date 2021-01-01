@@ -47,7 +47,6 @@ public:
     IFrameworkSettings *frameworkSettings() override;
 
 protected:
-    ITestParser *createTestParser() override;
     TestTreeItem *createRootNode() override;
 };
 

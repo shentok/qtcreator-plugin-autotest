@@ -39,11 +39,6 @@ GTestFramework::GTestFramework()
     g_settings = &m_settings;
 }
 
-ITestParser *GTestFramework::createTestParser()
-{
-    return new GTestParser(this);
-}
-
 TestTreeItem *GTestFramework::createRootNode()
 {
     return new GTestTreeItem(

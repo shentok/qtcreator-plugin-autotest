@@ -26,7 +26,8 @@
 #pragma once
 
 #include "testtreeitem.h"
-#include "itestparser.h"
+
+#include <utils/id.h>
 
 namespace Autotest {
 
@@ -44,7 +45,6 @@ public:
     virtual IFrameworkSettings *frameworkSettings() { return nullptr; }
 
     TestTreeItem *rootNode();
-    ITestParser *testParser();
 
     Utils::Id settingsId() const;
     Utils::Id id() const;
@@ -59,12 +59,10 @@ public:
     void resetRootNode();
 
 protected:
-    virtual ITestParser *createTestParser() = 0;
     virtual TestTreeItem *createRootNode() = 0;
 
 private:
     TestTreeItem *m_rootNode = nullptr;
-    ITestParser *m_testParser = nullptr;
     bool m_active = false;
     bool m_grouping = false;
 };

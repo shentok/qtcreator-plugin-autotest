@@ -32,11 +32,6 @@
 namespace Autotest {
 namespace Internal {
 
-ITestParser *BoostTestFramework::createTestParser()
-{
-    return new BoostTestParser(this);
-}
-
 TestTreeItem *BoostTestFramework::createRootNode()
 {
     return new BoostTestTreeItem(

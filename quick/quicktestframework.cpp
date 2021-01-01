@@ -34,11 +34,6 @@
 namespace Autotest {
 namespace Internal {
 
-ITestParser *QuickTestFramework::createTestParser()
-{
-    return new QuickTestParser(this);
-}
-
 TestTreeItem *QuickTestFramework::createRootNode()
 {
     return new QuickTestTreeItem(this, QCoreApplication::translate("QuickTestFramework", "Quick Test"),

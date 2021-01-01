@@ -31,11 +31,6 @@
 namespace Autotest {
 namespace Internal {
 
-ITestParser *QtTestFramework::createTestParser()
-{
-    return new QtTestParser(this);
-}
-
 TestTreeItem *QtTestFramework::createRootNode()
 {
     return new QtTestTreeItem(
